@@ -143,13 +143,22 @@ class NaiveBayes
     public function training(array $data)
     {
         $this->data = $data;
-        $stemmer = new Stemmer();
-        foreach ($this->data as $index => $item) {
-            $stemmed = $stemmer->stem($item['text']);
-            $this->data[$index]['text'] = $stemmed;
+        
+        $sw = [];
+        foreach ($this->data as $index => $item) {  
+            $x = explode(" ", $item['text']);
+            $tmp = [];
+            foreach ($x as $a => $b) {
+                $sw[] = strtolower(preg_replace('/[^A-Za-z0-9\-]/', '', $b));
+                $tmp[] = strtolower(preg_replace('/[^A-Za-z0-9\-]/', '', $b));
+            }
+            $this->data[$index]['text'] = join(" ",$tmp);
         }
 
-        $this->setWords($stemmer->getWords());
+        $unique = array_unique($sw);
+        $sw = array_values($unique);
+
+        $this->setWords($sw);
 
         foreach ($this->class as $item) {
             $classData = $this->getDataByClass($item);
@@ -191,9 +200,7 @@ class NaiveBayes
      */
     public function predict($data)
     {
-        $stemmer = new Stemmer();
-        $stemmed = $stemmer->stem($data);
-        $wordsArray = explode(' ', $stemmed);
+        $wordsArray = explode(' ', $data);
 
         // calculate each class
         $testClass = [];
@@ -224,10 +231,11 @@ class NaiveBayes
         }
 
         $max = max($result);
+        $k = '';
         foreach ($testClass as $key => $item) {
-            if ($item['result'] === $max) return $key;
+            if ($item['result'] === $max) $k = $key;
         }
-
-        return false;
+        $testClass['hasil'] = $k;
+        return $testClass;
     }
 }
