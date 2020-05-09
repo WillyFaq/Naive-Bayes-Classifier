@@ -1,0 +1,39 @@
+{
+    "name": "wfphpnlp/naivebayesclassifier",
+    "description": "PHP library for Indonesian text classification using the Naive Bayes Classifier (NBC) approach.",
+    "type": "library",
+    "keywords": [
+        "Naive Bayes",
+        "NaiveBayes",
+        "NaiveBayesClassifier",
+        "Naive Bayes Classifier",
+        "php NaiveBayesClassifier",
+        "php Naive Bayes Classifier",
+        "php NaiveBayes",
+        "php Naive Bayes",
+        "klasifikasi teks",
+        "bahasa indonesia",
+        "klasifikasi Naive Bayes"
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^5.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "WillyFaq",
+            "email": "willyfaqurokhim@gmail.com"
+        }
+    ],
+    "require": {},
+    "scripts": {
+       "test": [
+           "phpunit --testdox"
+       ]
+    },
+    "autoload": {
+        "psr-4": {
+            "wfphpnlp\\": "src/"
+        }
+    }
+}
