@@ -1,10 +1,10 @@
-# PHP sentistrength
+# Naive Bayes Classifier
 
-[![Build Status](https://travis-ci.org/WillyFaq/sentistrength.svg?branch=master)](https://travis-ci.org/WillyFaq/sentistrength)
-[![GitHub](https://img.shields.io/github/license/WillyFaq/sentistrength)]()
-[![Packagist Version](https://img.shields.io/packagist/v/wfphpnlp/sentistrength)](https://packagist.org/packages/wfphpnlp/sentistrength)
+[![Build Status](https://travis-ci.org/WillyFaq/Naive-Bayes-Classifier.svg?branch=master)](https://travis-ci.org/github/WillyFaq/Naive-Bayes-Classifier)
+[![GitHub](https://img.shields.io/github/license/willyfaq/Naive-Bayes-Classifier)]()
+[![Packagist Version](https://img.shields.io/packagist/v/willyfaq/Naive-Bayes-Classifier)](https://packagist.org/packages/wfphpnlp/naivebayesclassifier#dev-master)
 
-Library PHP untuk klasifikasi teks menjadi klasifikasi positif, negatif dan netral pada Bahasa Indonesia menggunakan metode SentiSrength.
+Library PHP untuk klasifikasi teks menjadi klasifikasi positif, negatif dan netral pada Bahasa Indonesia menggunakan metode Naive Bayes Classifier.
 
 ## Cara Install
 ### Via Composer
@@ -14,77 +14,71 @@ composer require wfphpnlp/naivebayesclassifier
 Jika Anda masih belum memahami bagaimana cara menggunakan Composer, silahkan baca [Getting Started with Composer](https://getcomposer.org/doc/00-intro.md).
 ### Clone GitHub
 ```bash
-git clone https://github.com/WillyFaq/Penilaian_Guru_Rating_Scale.git
+git clone https://github.com/WillyFaq/Naive-Bayes-Classifier.git
 ```
 ## Cara Penggunaan
 jika menggunakan composer inisiasikan projek anda dengan `vendor/autoload.php`
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
-use wfphpnlp/sentistrength;
-```
-configurasikan penggunaan kamus tambahan, jika tidak dikonfigurasi maka semua konfigurasi kamus akan digunakan.
-```php
-$config = array(
-    			'negation_conf' => true,
-    			'booster_conf' => true,
-    			'ungkapan_conf' => true,
-    			'consecutive_conf' => true,
-    			'repeated_conf' => true,
-    			'emoticon_conf' => true,
-    			'question_conf' => true,
-    			'exclamation_conf' => true,
-    			'punctuation_conf' => true,
-			);
+use wfphpnlp/NaiveBayes;
 ```
 Berikut contoh lengkap penggunaan.
 ```php
 <?php
 // include composer autoloader
 require_once __DIR__ . '/vendor/autoload.php';
-use wfphpnlp/sentistrength;
+use wfphpnlp/NaiveBayes;
 
-$config = array(
-			'negation_conf' => true,
-			'booster_conf' => true,
-			'ungkapan_conf' => true,
-			'consecutive_conf' => true,
-			'repeated_conf' => true,
-			'emoticon_conf' => true,
-			'question_conf' => true,
-			'exclamation_conf' => true,
-			'punctuation_conf' => true,
-			);
+    $data = [
+        [
+            'text' => 'Filmnya bagus, saya suka',
+            'class' => 'positif'
+        ],
+        [
+            'text' => 'Film jelek, aktingnya payah.',
+            'class' => 'negatif'
+        ],
+    ];
 			
-// create sentistrength
-$senti = new Sentistrength($config);
+    $nb = new NaiveBayes();
+    // mendefinisikan class target sesuai dengan yang ada pada data training.
+    $nb->setClass(['positif', 'negatif']);
 
-// hitung nilai sentistrength
-$hasil = $senti->main("agnezmo pintar dan cantik sekali tetapi lintah darat :)");
+    // proses training
+    $nb->training($data);
 
-echo $hasil['kelas'];
-// Positif
-
-//menampilkan hasil perhitungan
-print_r($hasil);
+    // pengujian
+    $p =  $nb->predict('alur ceritanya jelek dan aktingnya payah'); // output "negatif"
+    
+    print_r($p);
 /*
 Array
 (
-    [classified_text] => agnezmo pintar [4] dan cantik [6] sekali tetapi lintah darat [-4] :) [3]
-    [tweet_text] =>  agnezmo pintar dan cantik sekali tetapi lintah darat :)
-    [sentence_score] => Array
+    [positif] => Array
         (
-            [0] => agnezmo pintar [4] dan cantik [6] sekali tetapi lintah darat [-4] :) [3]
+            [computed] => Array
+                (
+                    [0] => 0.083333333333333
+                    [1] => 0.083333333333333
+                    [2] => 0.083333333333333
+                )
+
+            [result] => 0.0005787037037037
         )
 
-    [max_positive] => 6
-    [max_negative] => -4
-    [kelas] => Positif
+    [negatif] => Array
+        (
+            [computed] => Array
+                (
+                    [0] => 0.16666666666667
+                    [1] => 0.16666666666667
+                    [2] => 0.16666666666667
+                )
+
+            [result] => 0.0046296296296296
+        )
+
+    [hasil] => negatif
 )
 */
 ```
-## Pustaka
-### algoritma
-Algoritma yang digunakan pada library ini adalah hak intelektual masing-masing pemiliknya yang tertera di bawah ini. Lalu untuk meningkatkan kualitas kode, algoritma tersebut diterapkan ke dalam Object Oriented Design.Silakan kutip makalah ini jika Anda menggunakan program ini:
-- Wahid, D. H., & Azhari, S. N. (2016). Peringkasan Sentimen Esktraktif di Twitter Menggunakan Hybrid TF-IDF dan Cosine Similarity. IJCCS (Indonesian Journal of Computing and Cybernetics Systems), 10(2), 207-218.
-### Kamus
-Kamus/leksikon SentiStrength ini diperoleh dari [sentistrength_id](https://github.com/masdevid/sentistrength_id)
