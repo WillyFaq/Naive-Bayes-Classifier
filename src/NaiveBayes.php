@@ -121,7 +121,7 @@ class NaiveBayes
      * @param string $class
      * @return int
      */
-    public function findWordsClassIndex(string $class)
+    public function findWordsClassIndex($class)
     {
         foreach ($this->wordsClass as $index => $item) {
             foreach ($item as $key => $value) {
