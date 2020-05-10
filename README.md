@@ -1,7 +1,7 @@
 # Naive Bayes Classifier
 
 [![Build Status](https://travis-ci.org/WillyFaq/Naive-Bayes-Classifier.svg?branch=master)](https://travis-ci.org/github/WillyFaq/Naive-Bayes-Classifier)
-[![GitHub](https://img.shields.io/github/license/willyfaq/Naive-Bayes-Classifier)]()
+[![GitHub](https://img.shields.io/github/license/willyfaq/Naive-Bayes-Classifier)](https://github.com/WillyFaq/Naive-Bayes-Classifier/blob/master/LICENSE)
 [![Packagist Version](https://img.shields.io/packagist/v/willyfaq/Naive-Bayes-Classifier)](https://packagist.org/packages/wfphpnlp/naivebayesclassifier#dev-master)
 
 Library PHP untuk klasifikasi teks menjadi klasifikasi positif, negatif dan netral pada Bahasa Indonesia menggunakan metode Naive Bayes Classifier.
@@ -52,33 +52,34 @@ use wfphpnlp/NaiveBayes;
     
     print_r($p);
 /*
-Array
-(
-    [positif] => Array
-        (
-            [computed] => Array
-                (
-                    [0] => 0.083333333333333
-                    [1] => 0.083333333333333
-                    [2] => 0.083333333333333
-                )
+    //hasil output
+    Array
+    (
+        [positif] => Array
+            (
+                [computed] => Array
+                    (
+                        [0] => 0.083333333333333
+                        [1] => 0.083333333333333
+                        [2] => 0.083333333333333
+                    )
 
-            [result] => 0.0005787037037037
-        )
+                [result] => 0.0005787037037037
+            )
 
-    [negatif] => Array
-        (
-            [computed] => Array
-                (
-                    [0] => 0.16666666666667
-                    [1] => 0.16666666666667
-                    [2] => 0.16666666666667
-                )
+        [negatif] => Array
+            (
+                [computed] => Array
+                    (
+                        [0] => 0.16666666666667
+                        [1] => 0.16666666666667
+                        [2] => 0.16666666666667
+                    )
 
-            [result] => 0.0046296296296296
-        )
+                [result] => 0.0046296296296296
+            )
 
-    [hasil] => negatif
-)
+        [hasil] => negatif
+    )
 */
 ```

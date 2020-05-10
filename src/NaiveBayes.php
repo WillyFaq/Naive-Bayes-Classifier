@@ -55,7 +55,7 @@ class NaiveBayes
      * @param array $class
      * @return void
      */
-    public function setClass(array $class)
+    public function setClass($class)
     {
         $this->class = $class;
         $this->setWordsClass($class);
@@ -86,7 +86,7 @@ class NaiveBayes
      * @param string $class
      * @return array
      */
-    public function getDataByClass(string $class)
+    public function getDataByClass($class)
     {
         return array_filter($this->data, function ($item) use ($class) {
             return ($item['class'] === $class);
@@ -99,7 +99,7 @@ class NaiveBayes
      * @param array $data
      * @return void
      */
-    public function setStemmedData(array $data)
+    public function setStemmedData($data)
     {
         $this->stemmedData = $data;
     }
@@ -110,7 +110,7 @@ class NaiveBayes
      * @param array $words
      * @return void
      */
-    public function setWords(array $words)
+    public function setWords($words)
     {
         $this->words = $words;
     }
@@ -140,7 +140,7 @@ class NaiveBayes
      * @param array $data
      * @return void
      */
-    public function training(array $data)
+    public function training($data = [])
     {
         $this->data = $data;
         
