@@ -140,7 +140,7 @@ class NaiveBayes
      * @param array $data
      * @return void
      */
-    public function training($data = [])
+    public function training($data)
     {
         $this->data = $data;
         
