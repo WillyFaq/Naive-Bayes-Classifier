@@ -25,33 +25,46 @@ use wfphpnlp/NaiveBayes;
 Berikut contoh lengkap penggunaan.
 ```php
 <?php
-// include composer autoloader
-require_once __DIR__ . '/vendor/autoload.php';
-use wfphpnlp/NaiveBayes;
+    // include composer autoloader
+    require_once __DIR__ . '/vendor/autoload.php';
+    use wfphpnlp/NaiveBayes;
 
     $data = [
-        [
-            'text' => 'Filmnya bagus, saya suka',
-            'class' => 'positif'
-        ],
-        [
-            'text' => 'Film jelek, aktingnya payah.',
-            'class' => 'negatif'
-        ],
-    ];
+                [
+                    'text' => 'produknya keren kualitasnya bagus awet dan tahan lama',
+                    'class' => 'positif'
+                ],
+                [
+                    'text' => 'barangnya bagus mudah digunakan',
+                    'class' => 'positif'
+                ],
+                [
+                    'text' => 'barangnya cepat rusak kualitas buruk, tidak bisa digunakan sama sekali',
+                    'class' => 'negatif'
+                ],
+                [
+                    'text' => 'produknya jelek tidak sesuai harapan',
+                    'class' => 'negatif'
+                ],
+                [
+                    'text' => 'produk sudah cukup baik, cara penggunaanya juga cukup mudah',
+                    'class' => 'netral'
+                ],
+            ];
 			
     $nb = new NaiveBayes();
     // mendefinisikan class target sesuai dengan yang ada pada data training.
-    $nb->setClass(['positif', 'negatif']);
+    $nb->setClass(['positif', 'negatif', 'netral']);
 
     // proses training
     $nb->training($data);
 
     // pengujian
-    $p =  $nb->predict('alur ceritanya jelek dan aktingnya payah'); // output "negatif"
+    $this->result = $nb->predict('produknya buruk tidak keren'); // output "negatif"
     
     print_r($p);
 /*
+    
     //hasil output
     Array
     (
@@ -59,24 +72,39 @@ use wfphpnlp/NaiveBayes;
             (
                 [computed] => Array
                     (
-                        [0] => 0.083333333333333
-                        [1] => 0.083333333333333
-                        [2] => 0.083333333333333
+                        [0] => 0.05
+                        [1] => 0.025
+                        [2] => 0.025
+                        [3] => 0.05
                     )
 
-                [result] => 0.0005787037037037
+                [result] => 1.5625E-6
             )
 
         [negatif] => Array
             (
                 [computed] => Array
                     (
-                        [0] => 0.16666666666667
-                        [1] => 0.16666666666667
-                        [2] => 0.16666666666667
+                        [0] => 0.046511627906977
+                        [1] => 0.046511627906977
+                        [2] => 0.069767441860465
+                        [3] => 0.023255813953488
                     )
 
-                [result] => 0.0046296296296296
+                [result] => 3.5100024833268E-6
+            )
+
+        [netral] => Array
+            (
+                [computed] => Array
+                    (
+                        [0] => 0.027027027027027
+                        [1] => 0.027027027027027
+                        [2] => 0.027027027027027
+                        [3] => 0.027027027027027
+                    )
+
+                [result] => 5.3357208905745E-7
             )
 
         [hasil] => negatif
