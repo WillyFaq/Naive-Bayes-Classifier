@@ -27,7 +27,7 @@ Berikut contoh lengkap penggunaan.
 <?php
     // include composer autoloader
     require_once __DIR__ . '/vendor/autoload.php';
-    use wfphpnlp/NaiveBayes;
+    use wfphpnlp\NaiveBayes;
 
     $data = [
                 [
