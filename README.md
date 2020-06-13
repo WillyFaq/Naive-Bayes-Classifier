@@ -20,7 +20,7 @@ git clone https://github.com/WillyFaq/Naive-Bayes-Classifier.git
 jika menggunakan composer inisiasikan projek anda dengan `vendor/autoload.php`
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
-use wfphpnlp/NaiveBayes;
+use wfphpnlp\NaiveBayes;
 ```
 Berikut contoh lengkap penggunaan.
 ```php
