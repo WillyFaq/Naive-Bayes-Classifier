@@ -60,9 +60,9 @@ Berikut contoh lengkap penggunaan.
     $nb->training($data);
 
     // pengujian
-    $this->result = $nb->predict('produknya buruk tidak keren'); // output "negatif"
+    $result = $nb->predict('produknya buruk tidak keren'); // output "negatif"
     
-    print_r($p);
+    print_r($result);
 /*
     
     //hasil output
