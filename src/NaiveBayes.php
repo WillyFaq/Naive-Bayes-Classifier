@@ -155,8 +155,8 @@ class NaiveBayes
             $this->data[$index]['text'] = join(" ",$tmp);
         }
 
-        $unique = array_unique($sw);
-        $sw = array_values($unique);
+        /*$unique = array_unique($sw);
+        $sw = array_values($unique);*/
 
         $this->setWords($sw);
 
@@ -206,6 +206,9 @@ class NaiveBayes
         $testClass = [];
         foreach ($this->class as $class) {
             $index = $this->findWordsClassIndex($class);
+            $wordsCount = count(array_filter($this->wordsClass[$index]['words'], function ($item) {
+                return ($item['count'] !== 0);
+            }));
             foreach ($wordsArray as $word) {
                 $match = array_filter($this->wordsClass[$index]['computed'], function ($item) use ($word) {
                     return ($item['word'] === $word);
@@ -213,24 +216,148 @@ class NaiveBayes
 
                 if ($match) {
                     $testClass[$class]['computed'][] = reset($match)['value'];
+                }else{
+                    $testClass[$class]['computed'][] = 1 / ($wordsCount + count($this->words));
                 }
             }
 
-            $testClass[$class]['result'] = 1; // init the result for the class
+            $testClass[$class]['result'] = 0; // init the result for the class
         }
 
         foreach ($testClass as $key => $value) {
             if(isset($value['computed'])){
                 foreach ($value['computed'] as $val) {
-                    $testClass[$key]['result'] *= $val;
+                    $testClass[$key]['result'] += $val;
                 }
             }else{
-                $testClass[$key]['result'] *= 0;
+                $testClass[$key]['result'] += 0;
             }
         }
 
         $result = [];
         foreach ($this->class as $class) {
+            $testClass[$class]['result'] *=  $this->wordsClass[$index]['pData'];
+            $result[] = $testClass[$class]['result'];
+        }
+
+        $max = max($result);
+        $k = '';
+        foreach ($testClass as $key => $item) {
+            if ($item['result'] === $max) $k = $key;
+        }
+        $testClass['hasil'] = $k;
+        return $testClass;
+    }
+
+    /**
+     * Debug Proccess Training data.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function training_debug($data)
+    {
+        $this->data = $data;
+        
+        $sw = [];
+        foreach ($this->data as $index => $item) {  
+            //$x = explode(" || ", $item['text']);
+            $x = explode(" ", $item['text']);
+            $tmp = [];
+            foreach ($x as $a => $b) {
+                $sw[] = strtolower(preg_replace('/[^A-Za-z0-9\-]/', '', $b));
+                $tmp[] = strtolower(preg_replace('/[^A-Za-z0-9\-]/', '', $b));
+            }
+            $this->data[$index]['text'] = join(" ",$tmp);
+        }
+        /*$unique = array_unique($sw);
+        $sw = array_values($unique);*/
+        $this->setWords($sw);
+        foreach ($this->class as $item) {
+            $classData = $this->getDataByClass($item);
+            $index = $this->findWordsClassIndex($item);
+            foreach ($this->words as $word) {
+                $this->wordsClass[$index]['words'][] = ['word' => $word, 'count' => 0];
+            }
+
+            foreach ($classData as $item) {
+                $splits = explode(' ', $item['text']);
+                foreach ($this->wordsClass[$index]['words'] as $key => $word) {
+                    foreach ($splits as $split) {
+                        if ($word['word'] === $split) {
+                            $this->wordsClass[$index]['words'][$key]['count']++;
+                        }
+                    }
+                }
+            }
+
+            $this->wordsClass[$index]['pData'] = count($classData) / count($data);
+            $wordsCount = count(array_filter($this->wordsClass[$index]['words'], function ($item) {
+                return ($item['count'] !== 0);
+            }));
+            foreach ($this->wordsClass[$index]['words'] as $word) {
+                $this->wordsClass[$index]['computed'][] = [
+                    'word' => $word['word'],
+                    'value' => ($word['count'] + 1) / ($wordsCount + count($this->words))
+                ];
+            }
+        }
+    }
+    /**
+     * Debug Proccess Predict data.
+     *
+     * @param string|array $data
+     * @return string
+     */
+    public function predict_debug($data)
+    {
+        //$wordsArray = explode(' || ', $data);
+        $wordsArray = explode(' ', $data);
+
+        // calculate each class
+        $testClass = [];
+        foreach ($this->class as $class) {
+            $index = $this->findWordsClassIndex($class);
+            $wordsCount = count(array_filter($this->wordsClass[$index]['words'], function ($item) {
+                return ($item['count'] !== 0);
+            }));
+            foreach ($wordsArray as $word) {
+                $match = array_filter($this->wordsClass[$index]['computed'], function ($item) use ($word) {
+                    return ($item['word'] === $word);
+                });
+
+                if ($match) {
+                    $ct = array_filter($this->wordsClass[$index]['words'], function ($item) use ($word) {
+                        return ($item['word'] === $word);
+                    });
+                    $co = reset($ct)['count'];
+                    $testClass[$class]['debug'][$word] = "($co + 1) / ($wordsCount + ".count($this->words).")";
+                    $testClass[$class]['computed'][$word] = reset($match)['value'];
+                }else{
+                    
+                    $testClass[$class]['debug'][$word] = "(0 + 1) / ($wordsCount + ".count($this->words).")";
+                    $testClass[$class]['computed'][$word] = 1 / ($wordsCount + count($this->words));
+                }
+            }
+
+            $testClass[$class]['result'] = 0; // init the result for the class
+        }
+
+
+        foreach ($testClass as $key => $value) {
+            if(isset($value['computed'])){
+                foreach ($value['computed'] as $val) {
+                    $testClass[$key]['result'] += $val;
+                }
+            }else{
+                $testClass[$key]['result'] += 0;
+            }
+        }
+
+        $result = [];
+        foreach ($this->class as $class) {
+            $testClass[$class]['result'] *=  $this->wordsClass[$index]['pData'];
+            $testClass[$class]['pData'] =  $this->wordsClass[$index]['pData'];
             $result[] = $testClass[$class]['result'];
         }
 

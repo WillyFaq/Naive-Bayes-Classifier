@@ -49,19 +49,19 @@ class NaiveBayesTest extends PHPUnit\Framework\TestCase
 
     public function testHasilPositive()
     {
-        $max_positive = 1.5625E-6;
+        $max_positive = 0.023076923076923;
         $this->assertEquals($max_positive, $this->result['positif']['result']);
     }
 
     public function testHasilNegative()
     {
-        $max_negative = 3.5100024833268E-6;
+        $max_negative = 0.02962962962963;
         $this->assertEquals($max_negative, $this->result['negatif']['result']);
     }
 
     public function testHasilNetral()
     {
-        $max_negative = 5.3357208905745E-7;
+        $max_negative = 0.017391304347826;
         $this->assertEquals($max_negative, $this->result['netral']['result']);
     }
 }
